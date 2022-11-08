@@ -1,0 +1,21 @@
+.register__btn {
+  height: 45px;
+  margin-top: 133px;
+  width: 100%;
+}
+
+.form__label {
+  font-size: 10px;
+  line-height: 12px;
+  color: #A0A0A0;
+}
+@media screen and (max-width: 320px) {
+  .register__btn {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .register__btn {
+    margin-top: 222px;
+  }
+}
+
