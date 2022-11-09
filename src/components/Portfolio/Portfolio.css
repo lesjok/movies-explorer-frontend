@@ -15,8 +15,6 @@
   padding-top: 28px;
 }
 .list__item {
-  display: flex;
-  justify-content: space-between;
   border-bottom: 1px solid #E8E8E8;
   font-size: 30px;
   line-height: 50px;
@@ -25,6 +23,8 @@
   padding-bottom: 17px;
 }
 .item__link {
+  display: flex;
+  justify-content: space-between;
   text-decoration: none;
   color: #000;
   transition: .2s;

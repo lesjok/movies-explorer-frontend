@@ -9,22 +9,22 @@ function Portfolio() {
       <nav>
         <ul className="portfolio__list list">
           <li className="list__item item">
-            <Link to="" className="item__link">
+            <Link to="https://lesjok.github.io/russian-travel/" className="item__link" target="blank">
               <p className="item__name">Статичный сайт</p>
-            </Link>
-            <img src={arrow} className="item__arrow" alt="arrow" />
+              <img src={arrow} className="item__arrow" alt="arrow" />
+            </Link>         
           </li>
           <li className="list__item item">
-            <Link to="" className="item__link">
+            <Link to="https://lesjok.github.io/russian-travel/" className="item__link" target="blank">
               <p className="item__name">Адаптивный сайт</p>
-            </Link>
-            <img src={arrow} className="item__arrow" alt="arrow" />
+              <img src={arrow} className="item__arrow" alt="arrow" />
+            </Link>       
           </li>
           <li className="list__item item">
-            <Link to="" className="item__link">
-              <p className="item__name">Одностраничное приложение</p>  
-            </Link> 
-            <img src={arrow} className="item__arrow" alt="arrow" />
+            <Link to="https://lesjok.github.io/russian-travel/" className="item__link" target="blank">
+              <p className="item__name">Одностраничное приложение</p>
+              <img src={arrow} className="item__arrow" alt="arrow" /> 
+            </Link>    
           </li>
         </ul>
       </nav>
