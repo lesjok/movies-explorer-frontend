@@ -1,0 +1,11 @@
+.movies__container {
+  max-width: 89%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  .movies__container {
+    max-width: 94%;
+  }
+}

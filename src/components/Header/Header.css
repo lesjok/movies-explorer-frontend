@@ -1,0 +1,71 @@
+.header {
+  align-items: center;
+  display: grid;
+  padding: 18px 71px;
+  grid-template-columns: 38px auto;
+}
+.header_theme_dark {
+  background-color: #073042;
+  display: flex;
+  justify-content: space-between;
+}
+.header__logo {
+  display: inline-block;
+}
+.nav {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+.nav__signup {
+  font-size: 12px;
+  line-height: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+  border: none;
+  background-color: inherit;
+  text-decoration: none;
+}
+.nav__signin {
+  font-size: 12px;
+  line-height: 16px;
+  color: #000;
+  text-decoration: none;
+  border: none;
+  padding: 8px 21px;
+  background-color: #2BE080;
+  border-radius: 3px;
+}
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 15px 30px;
+  }
+  .header_theme_light {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .header {
+    padding: 16px 14px;
+  }
+  .nav__signin {
+    display: flex;
+    width: 54px;
+    padding: 0;
+    box-sizing: border-box;
+    height: 25px;
+    font-size: 10px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+  .nav {
+    gap: 15px;
+  }
+  .nav__signup {
+    font-size: 10px;
+  }
+}

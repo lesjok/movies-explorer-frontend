@@ -1,1 +1,1 @@
-# movies-explorer-frontend
+# Ссылка на макет: https://yadi.sk/d/bflb510EIW6XxQ
