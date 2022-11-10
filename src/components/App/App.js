@@ -34,7 +34,7 @@ function App() {
         <Route path ="/" exact>
           <Main />
         </Route>
-        <Route path="">
+        <Route path="*">
           <NotFoundPage />
         </Route>
       </Switch> 
