@@ -6,6 +6,7 @@
   flex-wrap: wrap;
   padding: 0;
   margin: 0;
+  margin-bottom: 75px;
   column-gap: 30px;
   row-gap: 58px;
 }
@@ -14,7 +15,7 @@
   width: 320px;
   height: 36px;
   display: inherit;
-  margin: 75px auto 159px;
+  margin: 0 auto 159px;
   font-weight: 500;
   font-size: 12px;
   border: 1px solid #E8E8E8;

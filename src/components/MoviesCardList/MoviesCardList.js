@@ -1,22 +1,34 @@
 import "./MoviesCardList.css";
-import moviesData from '../../utils/moviesData';
 import MoviesCard from '../MoviesCard/MoviesCard';
+import Preloader from '../Preloader/Preloader';
 
-function MoviesCardList() {
-
+function MoviesCardList(props) {
   return (
     <>
-    <ul className="movies-list">
-        {moviesData.map((movie) => (
+    {props.preloader ? <Preloader /> : 
+      <ul className="movies-list">
+        {props.moviesCardList.map((movie) => (
           <MoviesCard
-            key={movie._id}
-            img={movie.img}
-            name={movie.name}
+            onSaved={props.onSaved}
+            movie={movie}
+            key={movie.id || movie.movieId}
+            nameRU={movie.nameRU}
+            country={movie.country}
+            director={movie.director}
             duration={movie.duration}
+            year={movie.year}
+            description={movie.description}
+            trailerLink={movie.trailerLink}
+            owner={movie.owner}
+            nameEN={movie.nameEN}
+            movieId={movie._id}
+            path={props.path}
+            thumbnail={props.thumbnail}
+            moviesSavedCards={props.moviesSavedCards}
           />
         ))}
-    </ul>
-    <button className="btn-show-more">Ещё</button>
+    </ul>}
+    {props.btnElse && <button className="btn-show-more" type="button" onClick={props.addCard}>Ещё</button>}
     </>
   );
 }

@@ -31,12 +31,15 @@
 }
 .profile__edit {
   display: block;
-  margin-top: 221px;
   text-decoration: none;
+  border: none;
+  background-color: transparent;
   font-size: 13px;
-  line-height: 16px;
   color: #000;
   text-align: center;
+  line-height: 16px;
+  margin: 221px auto 0;
+  cursor: pointer;
 }
 .profile__signout {
   font-weight: 500;

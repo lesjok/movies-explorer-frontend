@@ -4,8 +4,9 @@
   width: 359px;
 }
 .movie-card__img {
-   width: 100%;
-   height: 201px;
+  width: 100%;
+  height: 201px;
+  border-radius: 6px;
 }
 .movies-card__btn_status_not-checked {
   position: absolute;
@@ -33,6 +34,10 @@
   right: 14px;
   font-size: 0;
   border: none;
+  cursor: pointer;
+}
+.movies-card__invisible {
+  display: none;
 }
 .movie-card__title {
   margin: 0;

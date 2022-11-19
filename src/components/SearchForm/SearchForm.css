@@ -5,6 +5,7 @@
   width: 89%;
   margin: 0 auto;
 }
+
 .search-form__input {
   width: 100%;
   box-sizing: border-box;
@@ -30,6 +31,12 @@
   margin-top: 39px;
   margin-bottom: 0;
   border: 1px solid rgba(170, 170, 170, 0.2);
+}
+.input__error.search__error {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  display: inline-block;
 }
 
 @media screen and (max-width: 768px) {
