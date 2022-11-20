@@ -11,3 +11,6 @@ https://yadi.sk/d/bflb510EIW6XxQ
 
 **Ссылка на проект:**
 [https://github.com/lesjok/movies-explorer-frontend]
+
+**Ссылка на pull-request:**
+https://github.com/lesjok/movies-explorer-frontend/pull/2
