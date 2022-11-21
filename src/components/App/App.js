@@ -36,6 +36,7 @@ function App() {
   const [isErrorMessage, setIsErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [currentUser, setCurrentUser] = useState({});
+  const [isChecked, setIsChecked] = useState(false);
   const history = useHistory();
 
 function filterShortMovies() {
@@ -44,7 +45,6 @@ function filterShortMovies() {
 
 function filterShortSaveMovies() {
   setIsActiveCheckboxSave(!isActiveCheckboxSave);
-  console.log(isActiveCheckboxSave);
 }
   
 function handleSearchMovies(searchQuery) {
@@ -53,7 +53,6 @@ function handleSearchMovies(searchQuery) {
   setPreloader(true);
   setIsSearched(true);
   setNotFoundMovie(false);
-  // setSearchQueryMovies(searchQuery);
   apiMovies.getAllMovies()
   .then((movies) => {
     if (movies) {
@@ -133,7 +132,6 @@ function handleSearchSaveMovies(searchQuery) {
         setNotFoundMovie(true);
       }
       setSearchSaveMovies(shortMovies);
-      console.log(searchSaveMovies);
       } else {
         const longMovies = movies.filter((movie) => {
           if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase())) {
@@ -146,7 +144,6 @@ function handleSearchSaveMovies(searchQuery) {
           setNotFoundMovie(true);
         }
         setSearchSaveMovies(longMovies);
-        console.log(searchSaveMovies);
       }
     })
     .catch((err) => {
@@ -260,8 +257,18 @@ function checkToken() {
     }
   })
   .catch((err) => {
-    console.log(err);
-  });
+    setCurrentUser({
+      id: '',
+      name: '',
+      email: '',
+      isLoggedIn: false,
+    })
+    localStorage.removeItem('search-movies');
+    localStorage.removeItem('checkbox');
+    localStorage.removeItem('search-word');
+    console.log(`Error ${err.status}: ${err.text}`)
+  })
+  .finally(() => setIsChecked(true));
 }
 
 useEffect(() => {
@@ -272,8 +279,6 @@ function onUpdateUserData(data) {
   apiMain.changeUser(data)
   .then((res) => {
     setCurrentUser(res);
-    console.log(res);
-    console.log(currentUser);
     setIsErrorMessage(true);
     setErrorMessage("Данные пользователя успешно обновлены.");
   })
@@ -313,8 +318,6 @@ function handleSavedMovies(currentMovie) {
         apiMain.getSavedMovies()
       .then((data) => {
         setSavedMovies(data);
-        console.log(data);
-        console.log(savedMovies);
         console.log('карточка добавлена');
       })
       .catch((err) => {
@@ -335,12 +338,6 @@ useEffect(() => {
   }
 }, [loggedIn]);
 
-// useEffect(() => {
-//     if (localStorage.getItem('savedMovies')) {
-//       setSavedMovies(savedMovies);
-//   }
-// }, []);
-
 useEffect(() => {
   if (loggedIn) {
     if (localStorage.getItem('search-word')) {
@@ -357,15 +354,9 @@ useEffect(() => {
   handleSearchSaveMovies(searchSaveMovies);
 }, [isActiveCheckboxSave]);
 
-// useEffect(() => {
-//   handleSearchSaveMovies(searchQuerySaveMovies);
-// }, [isActiveCheckboxSave]);
-
 useEffect(() => {
   setSavedMovies(savedMovies);
 }, [searchSaveMovies, isActiveCheckboxSave, savedMovies]);
-
-
 
 useEffect(() => {
   const searchedMovies = JSON.parse(localStorage.getItem('search-movies'));
@@ -397,6 +388,7 @@ function signOut() {
     setSearchMovies([]);
     isActiveCheckbox(false);
     isActiveCheckboxSave(false);
+    localStorage.removeItem('search-movies');
     localStorage.removeItem('checkbox');
     localStorage.removeItem('search-word');
     localStorage.clear();
@@ -417,26 +409,28 @@ function signOut() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <Switch>
+          {isChecked && <Route path ="/" exact>
+            <Main loggedIn={loggedIn} />
+          </Route>}
           <Route path="/signin">
             {loggedIn ? <Redirect to="/" /> : <Login onLogin={handleLogin} errorMessage={errorMessage} isErrorMessage={isErrorMessage} />}
           </Route>
           <Route path="/signup">
             {loggedIn ? <Redirect to="/" /> : <Register onRegister={handleRegister} errorMessage={errorMessage} isErrorMessage={isErrorMessage} />}
           </Route>
-          {loggedIn ? <ProtectedRoute path="/profile" loggedIn={loggedIn} component={Profile} onSignOut={signOut} userName={currentUser.name} userEmail={currentUser.email} /> : <Main loggedIn={loggedIn} />}
+          {isChecked && <ProtectedRoute path="/profile" loggedIn={loggedIn} component={Profile} onSignOut={signOut} userName={currentUser.name} userEmail={currentUser.email} />}
 
-          {loggedIn ? <ProtectedRoute path="/profile-update" loggedIn={loggedIn} onUpdateUserData={onUpdateUserData} component={ProfileUpdate} errorMessage={errorMessage} isErrorMessage={isErrorMessage} /> : <Main loggedIn={loggedIn} />}
+          {isChecked && <ProtectedRoute path="/profile-update" loggedIn={loggedIn} onUpdateUserData={onUpdateUserData} component={ProfileUpdate} errorMessage={errorMessage} isErrorMessage={isErrorMessage} />}
           
-          {loggedIn ? <ProtectedRoute path="/movies" moviesCards={searchMovies.slice(0, countOfMovies)} searchMovies={handleSearchMovies} preloader={preloader} handleSavedMovies={handleSavedMovies} loggedIn={loggedIn} component={Movies} filterShortMovies={filterShortMovies} addCard={addCard} btnElse={btnElse} moviesSavedCards={savedMovies} isActiveCheckbox={isActiveCheckbox} notFoundMovie={notFoundMovie} searchWord={searchWord} /> : <Main loggedIn={loggedIn} />}
+          {isChecked && <ProtectedRoute path="/movies" moviesCards={searchMovies.slice(0, countOfMovies)} searchMovies={handleSearchMovies} preloader={preloader} handleSavedMovies={handleSavedMovies} loggedIn={loggedIn} component={Movies} filterShortMovies={filterShortMovies} addCard={addCard} btnElse={btnElse} moviesSavedCards={savedMovies} isActiveCheckbox={isActiveCheckbox} notFoundMovie={notFoundMovie} searchWord={searchWord} />}
 
-          {loggedIn ? <ProtectedRoute path="/saved-movies" handleSavedMovies={handleSavedMovies} isSearched={isSearched} searchMovies={handleSearchSaveMovies} filterShortMovies={filterShortSaveMovies} moviesSavedCards={savedMovies} searchSaveMovies={searchSaveMovies} loggedIn={loggedIn} component={SavedMovies} isActiveCheckbox={isActiveCheckboxSave} notFoundMovie={notFoundMovie} searchWord={searchWord} /> : <Main loggedIn={loggedIn} />}
+          {isChecked && <ProtectedRoute path="/saved-movies" handleSavedMovies={handleSavedMovies} isSearched={isSearched} searchMovies={handleSearchSaveMovies} filterShortMovies={filterShortSaveMovies} moviesSavedCards={savedMovies} searchSaveMovies={searchSaveMovies} loggedIn={loggedIn} component={SavedMovies} isActiveCheckbox={isActiveCheckboxSave} notFoundMovie={notFoundMovie} searchWord={searchWord} />}
                  
-          <Route path ="/" exact>
-            <Main loggedIn={loggedIn} />
-          </Route>
+          {isChecked && 
           <Route path="*">
             <NotFoundPage />
-          </Route>
+          </Route>}
+
         </Switch> 
       </div>
     </CurrentUserContext.Provider>
