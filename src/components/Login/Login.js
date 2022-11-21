@@ -34,7 +34,7 @@ function Login(props) {
           {errors?.email?.type === "pattern" && <p>{errors?.email?.message || "Введите корректный Email"}</p>}
         </span>
         <label htmlFor="password" className="form__label">Пароль</label>
-        <input type="text" className="input form__password" id="password" name="password" {...register('password', {
+        <input type="password" className="input form__password" id="password" name="password" {...register('password', {
           required: "Поле обязательно к заполнению",
         })} />
         <span className="input__error">

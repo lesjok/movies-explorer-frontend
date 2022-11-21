@@ -27,6 +27,9 @@
   right: 10px;
   top: 76px;
 }
+.search-form__btn_disabled:hover {
+  pointer-events: none;
+}
 .search-form__hr {
   margin-top: 39px;
   margin-bottom: 0;

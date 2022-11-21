@@ -17,7 +17,10 @@ class Api {
     headers: this._options.headers,
     credentials: this._options.credentials,
   })
-    .then(this._errorHandler);
+    .then(this._errorHandler)
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   deleteMovie(id) {
@@ -26,7 +29,10 @@ class Api {
     headers: this._options.headers,
     credentials: this._options.credentials,
   })
-    .then(this._errorHandler); 
+    .then(this._errorHandler)
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   getSavedMovies() {
@@ -34,7 +40,10 @@ class Api {
       headers: this._options.headers,
       credentials: this._options.credentials,
     })
-    .then(this._errorHandler);
+    .then(this._errorHandler)
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   register(data) {
@@ -45,6 +54,9 @@ class Api {
       credentials: this._options.credentials,   
     })
     .then(this._errorHandler)
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   authorize(data) {
@@ -55,6 +67,9 @@ class Api {
       credentials: this._options.credentials,
     })
     .then(this._errorHandler)
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   getContent() {
@@ -63,6 +78,9 @@ class Api {
       credentials: this._options.credentials,
     })
     .then(this._errorHandler)
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   changeUser(data) {
@@ -72,7 +90,10 @@ class Api {
       body: JSON.stringify(data),
       credentials: this._options.credentials,
     })
-    .then(this._checkResponseStatus);
+    .then(this._checkResponseStatus)
+    .catch((err) => {
+      console.log(err);
+    })
   }
   
   signOut() {
@@ -81,12 +102,15 @@ class Api {
       credentials: this._options.credentials,
     })
     .then(this._errorHandler)
+    .catch((err) => {
+      console.log(err);
+    })
   }
 }
 
 const api = new Api({
-  baseUrl: 'https://api-movies.04.pe',
-  // baseUrl: 'http://localhost:3000',
+  // baseUrl: 'https://api-movies.04.pe',
+  baseUrl: 'http://localhost:3000',
   // использую свой домен, так как тех поддержка яндекса не может решить проблему настройки доменов, а дедлайн уже очень близко нет времени ждать
   headers: {
     'Content-Type': 'application/json',

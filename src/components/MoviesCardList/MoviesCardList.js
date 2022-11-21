@@ -11,7 +11,7 @@ function MoviesCardList(props) {
           <MoviesCard
             onSaved={props.onSaved}
             movie={movie}
-            key={movie.id || movie.movieId}
+            key={movie.id || movie._id}
             nameRU={movie.nameRU}
             country={movie.country}
             director={movie.director}

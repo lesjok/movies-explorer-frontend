@@ -12,7 +12,10 @@ class Api {
     return fetch(this._options.baseUrl, {
       headers: this._options.headers
     })
-    .then(this._errorHandler);
+    .then(this._errorHandler)
+    .catch((err) => {
+      console.log(err);
+    })
   }
 }
 

@@ -52,11 +52,13 @@ function onDeleteClick() {
 
   return (
     <li className={cardState}>
-      <img src={props.path === '/movies' ? `https://api.nomoreparties.co/${props.movie.image.url}` : `${props.movie.image}`} alt={props.thumbnail} className="movie-card__img" />
-      <button className={isOwn ? "movies-card__btn_status_checked" : buttonState} type="button" onClick={props.path === '/saved-movies' ? onDeleteClick : onAddClick}>Сохранить</button>
+      <a href={props.trailerLink} target="_blank" rel="noreferrer">
+        <img src={props.path === '/movies' ? `https://api.nomoreparties.co/${props.movie.image.url}` : `${props.movie.image}`} alt={props.thumbnail} className="movie-card__img" />
+      </a>     
+      <button className={isOwn ? "movies-card__btn_status_checked" : buttonState} type="button" onClick={props.path === '/saved-movies' ? onDeleteClick : onAddClick} disabled={isOwn && props.path === '/movies'}>Сохранить</button>
       <div className="movie-card__info">
         <h6 className="movie-card__title">{props.nameRU}</h6>
-        <p className="movie-card__duration">{props.duration}</p>
+        <p className="movie-card__duration">{`${Math.floor(props.duration / 60)}ч ${(props.duration % 60)}м`}</p>
       </div>      
     </li>
   );

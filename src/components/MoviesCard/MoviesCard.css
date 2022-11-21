@@ -25,7 +25,17 @@
   padding: 0;
   cursor: pointer;
 }
-.movies-card__btn_status_checked {
+.movies-card__btn_status_checked:hover {
+  background: #F9F9F9;
+  border-radius: 50%;
+  border: none;
+  background-size: 15px 15px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url('../../images/dislike.svg');
+}
+.movies-card__btn_status_checked,
+.movies-card__btn_status_checked:disabled {
   width: 21px;
   height: 21px;
   background: url('../../images/checkmark.svg');
@@ -35,6 +45,9 @@
   font-size: 0;
   border: none;
   cursor: pointer;
+}
+.movies-card__btn_status_checked:disabled {
+  cursor: default;
 }
 .movies-card__invisible {
   display: none;
@@ -96,5 +109,14 @@
   }
   .movie-card__img {
     height: 168px;
+  }
+  .movies-card__btn_status_checked {
+    background: #F9F9F9;
+    border-radius: 50%;
+    border: none;
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url('../../images/dislike.svg');
   }
 }
