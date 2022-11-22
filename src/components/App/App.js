@@ -256,15 +256,6 @@ function checkToken() {
     }
   })
   .catch((err) => {
-    setCurrentUser({
-      id: '',
-      name: '',
-      email: '',
-      isLoggedIn: false,
-    })
-    localStorage.removeItem('search-movies');
-    localStorage.removeItem('checkbox');
-    localStorage.removeItem('search-word');
     console.log(`Error ${err.status}: ${err.text}`)
   })
   .finally(() => setIsChecked(true));
@@ -298,7 +289,7 @@ function handleRemove(id) {
     ...savedMovies.filter(item => id !== item.movieId)
   ])
 }
-  
+
 function handleSavedMovies(currentMovie) {
   const isLiked = savedMovies.some(i => (i.movieId === currentMovie.movieId)) || currentMovie.owner;
     if (isLiked) {
@@ -351,11 +342,11 @@ useEffect(() => {
 
 useEffect(() => {
   handleSearchSaveMovies(searchQuerySaveMovies);
-}, [isActiveCheckboxSave]);
+}, [isActiveCheckboxSave, savedMovies]);
 
 useEffect(() => {
   setSavedMovies(savedMovies);
-}, [searchSaveMovies, isActiveCheckboxSave, savedMovies]);
+}, [searchSaveMovies, isActiveCheckboxSave]);
 
 useEffect(() => {
   const searchedMovies = JSON.parse(localStorage.getItem('search-movies'));
