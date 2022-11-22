@@ -3,38 +3,33 @@ import { useEffect } from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import { useFormWithValidation } from "../../hooks/useFormWithValidation.js";
 import React from "react";
-function SearchForm({ onSearch, filterShortMovies, isActiveCheckbox, searchWord  = ''}) {
-const {values, handleChange, errors, isValid, setValues } = useFormWithValidation();
-  // const [clicked, setClicked] = React.useState(false);
-  // const [textError] = React.useState('Нужно ввести ключевое слово');
-  const [error, setError] = React.useState('');
+function SearchForm({ onSearch, filterShortMovies, isActiveCheckbox, searchWord }) {
+const {values, handleChange, isValid, setValues } = useFormWithValidation();
+  const [clicked, setClicked] = React.useState(false);
+  const [textError] = React.useState('Нужно ввести ключевое слово');
 
   useEffect(() => {
     setValues({
-    search: searchWord,
+    search: searchWord || '',
   });
-  }, [setValues, searchWord]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setValues]);
 
-  const changeHandler = () => {
-    // setClicked(true);
-  if (searchWord.length !== 0) setError('');
+  const clickHandler = () => {
+    setClicked(true);
   }
 
   const searchMovies = (e) => {
     e.preventDefault();
     onSearch(values.search);
-    if (values.search.length === 0) {
-    setError('Нужно ввести ключевое слово');
-    return;
-  }
   }
 
   return (
-    <form className="search-form" name="search" onSubmit={searchMovies}>
+    <form className="search-form" name="search" onSubmit={searchMovies} noValidate>
       <div className="search-form__container">
-        {values.search.length === 0 && <span className="input__error search__error">{error}</span>}
-        <input className="search-form__input" placeholder="Фильм" type="text" name="search" value={values.search} onChange={changeHandler}/>
-        <button className="search-form__btn form__btn" type="submit" disabled={values.search.length === 0}>Поиск</button>
+        {(!isValid && clicked) && <span className="input__error search__error">{textError}</span>}
+        <input className="search-form__input" placeholder="Фильм" type="text" name="search" value={values.search} onChange={handleChange} required />
+        <button className="search-form__btn form__btn" type="submit" onClick={clickHandler} disabled={(!isValid && !clicked) || values.search === ''}>Поиск</button>
         <FilterCheckbox filterShortMovies={filterShortMovies} isActiveCheckbox={isActiveCheckbox} />
         <hr className="search-form__hr"></hr>
       </div>         

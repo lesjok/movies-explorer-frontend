@@ -12,7 +12,7 @@ function SavedMovies(props) {
     <Header isLogged={true}>
       <Navigation />
     </Header>
-    <SearchForm onSearch={props.searchMovies} filterShortMovies={props.filterShortMovies} isActiveCheckbox={props.isActiveCheckbox} />
+    <SearchForm onSearch={props.searchMovies} filterShortMovies={props.filterShortMovies} isActiveCheckbox={props.isActiveCheckbox} searchWord={props.searchWord} />
     <main className="movies">
       <div className="movies__container">
         {props.notFoundMovie ? <p className="movies__not-found">Ничего не найдено</p> : <MoviesCardList moviesCardList={props.isSearched ? props.searchSaveMovies : props.moviesSavedCards} onSaved={props.handleSavedMovies} path={props.path} preloader={props.preloader} addCard={props.addCard} />}

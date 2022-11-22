@@ -17,7 +17,6 @@ import apiMain from '../../utils/MainApi';
 function App() {
   const [savedMovies, setSavedMovies] = useState([]);
   const [searchMovies, setSearchMovies] = useState([]);
-  const [searchMoviesList, setSearchMoviesList] = useState([]);
   const [searchQuerySaveMovies, setSearchQuerySaveMovies] = useState('');
   const [searchWord, setSearchWord] = useState('');
   const [preloader, setPreloader] = useState(false);
@@ -31,7 +30,6 @@ function App() {
   const [isActiveCheckbox, setIsActiveCheckbox] = useState(false);
   const [isActiveCheckboxSave, setIsActiveCheckboxSave] = useState(false);
   const [shortMoviesList, setShortMoviesList] = useState([]);
-  const [searchSaveShortMovies, setSearchSaveShortMovies] = useState([]);
   const [searchSaveMovies, setSearchSaveMovies] = useState([]);
   const [isErrorMessage, setIsErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -78,6 +76,7 @@ function handleSearchMovies(searchQuery) {
         localStorage.setItem('search-word', searchQuery);
         localStorage.setItem('checkbox', isActiveCheckbox);
       } else {
+        // eslint-disable-next-line array-callback-return
         const longMovies = movies.filter((movie) => {  
           if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase())) {
             return movie.nameRU;
@@ -347,11 +346,11 @@ useEffect(() => {
 }, [isActiveCheckbox]);
 
 useEffect(() => {
-  handleSearchMovies(searchMoviesList);
+  handleSearchMovies(searchWord);
 }, [isActiveCheckbox]);
 
 useEffect(() => {
-  handleSearchSaveMovies(searchSaveMovies);
+  handleSearchSaveMovies(searchQuerySaveMovies);
 }, [isActiveCheckboxSave]);
 
 useEffect(() => {
@@ -365,14 +364,13 @@ useEffect(() => {
   if (searchedMovies && searchedMovies !== []) {
     setSearchMovies(searchedMovies);
   }
-}, [loggedIn, searchMoviesList, shortMoviesList]);
+}, [loggedIn, shortMoviesList, searchSaveMovies]);
 
 useEffect(() => {
   if (loggedIn) {
     apiMain.getSavedMovies()
     .then((data) => {
       setSavedMovies(data);
-      console.log(data);
     })
     .catch((err) => {
       console.log(err);
@@ -388,10 +386,6 @@ function signOut() {
     setSearchMovies([]);
     isActiveCheckbox(false);
     isActiveCheckboxSave(false);
-    localStorage.removeItem('search-movies');
-    localStorage.removeItem('checkbox');
-    localStorage.removeItem('search-word');
-    localStorage.clear();
     setSearchMovies([]);
     setCountOfMovies(0);
     setSavedMovies([]);
@@ -399,6 +393,10 @@ function signOut() {
     setLoggedIn(false);
     setSearchWord('');
     setNotFoundMovie(false);
+    localStorage.removeItem('search-movies');
+    localStorage.removeItem('checkbox');
+    localStorage.removeItem('search-word');
+    localStorage.clear();
   })
   .catch((err) => {
     console.log(err.name);
@@ -424,7 +422,7 @@ function signOut() {
           
           {isChecked && <ProtectedRoute path="/movies" moviesCards={searchMovies.slice(0, countOfMovies)} searchMovies={handleSearchMovies} preloader={preloader} handleSavedMovies={handleSavedMovies} loggedIn={loggedIn} component={Movies} filterShortMovies={filterShortMovies} addCard={addCard} btnElse={btnElse} moviesSavedCards={savedMovies} isActiveCheckbox={isActiveCheckbox} notFoundMovie={notFoundMovie} searchWord={searchWord} />}
 
-          {isChecked && <ProtectedRoute path="/saved-movies" handleSavedMovies={handleSavedMovies} isSearched={isSearched} searchMovies={handleSearchSaveMovies} filterShortMovies={filterShortSaveMovies} moviesSavedCards={savedMovies} searchSaveMovies={searchSaveMovies} loggedIn={loggedIn} component={SavedMovies} isActiveCheckbox={isActiveCheckboxSave} notFoundMovie={notFoundMovie} searchWord={searchWord} />}
+          {isChecked && <ProtectedRoute path="/saved-movies" handleSavedMovies={handleSavedMovies} isSearched={isSearched} searchMovies={handleSearchSaveMovies} filterShortMovies={filterShortSaveMovies} moviesSavedCards={savedMovies || ''} searchSaveMovies={searchSaveMovies} loggedIn={loggedIn} component={SavedMovies} isActiveCheckbox={isActiveCheckboxSave} notFoundMovie={notFoundMovie} searchWord={searchWord} />}
                  
           {isChecked && 
           <Route path="*">
