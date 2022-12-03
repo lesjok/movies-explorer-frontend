@@ -246,7 +246,7 @@ useEffect(() => {
       console.log(err.name);
     })
   }
-}, [loggedIn, onUpdateUserData]);
+}, [loggedIn]);
 
 function checkToken() {
   apiMain
@@ -286,7 +286,6 @@ function onUpdateUserData(data) {
     }, 5000)
   })
 }
-
 
 
 function handleSavedMovies(currentMovie) {
@@ -375,10 +374,6 @@ function signOut() {
     history.push('/');
     setSearchMovies([]);
     setCountOfMovies(0);
-    // setIsActiveCheckbox(false);
-    // setIsActiveCheckboxSave(false);
-    // setSavedMovies([]);
-    // setSearchSaveMovies([]);
     setShortMoviesList([]);
     setLoggedIn(false);
     setSearchWord('');
