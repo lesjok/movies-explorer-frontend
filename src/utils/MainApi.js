@@ -18,9 +18,6 @@ class Api {
     credentials: this._options.credentials,
   })
     .then(this._errorHandler)
-    .catch((err) => {
-      console.log(err);
-    })
   }
 
   deleteMovie(id) {
@@ -30,9 +27,6 @@ class Api {
     credentials: this._options.credentials,
   })
     .then(this._errorHandler)
-    .catch((err) => {
-      console.log(err);
-    })
   }
 
   getSavedMovies() {
@@ -41,9 +35,6 @@ class Api {
       credentials: this._options.credentials,
     })
     .then(this._errorHandler)
-    .catch((err) => {
-      console.log(err);
-    })
   }
 
   register(data) {
@@ -54,9 +45,6 @@ class Api {
       credentials: this._options.credentials,   
     })
     .then(this._errorHandler)
-    .catch((err) => {
-      console.log(err);
-    })
   }
 
   authorize(data) {
@@ -67,9 +55,6 @@ class Api {
       credentials: this._options.credentials,
     })
     .then(this._errorHandler)
-    .catch((err) => {
-      console.log(err);
-    })
   }
 
   getContent() {
@@ -78,9 +63,6 @@ class Api {
       credentials: this._options.credentials,
     })
     .then(this._errorHandler)
-    .catch((err) => {
-      console.log(err);
-    })
   }
 
   changeUser(data) {
@@ -91,9 +73,6 @@ class Api {
       credentials: this._options.credentials,
     })
     .then(this._checkResponseStatus)
-    .catch((err) => {
-      console.log(err);
-    })
   }
   
   signOut() {
@@ -102,9 +81,6 @@ class Api {
       credentials: this._options.credentials,
     })
     .then(this._errorHandler)
-    .catch((err) => {
-      console.log(err);
-    })
   }
 }
 

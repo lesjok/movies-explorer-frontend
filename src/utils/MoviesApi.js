@@ -13,9 +13,6 @@ class Api {
       headers: this._options.headers
     })
     .then(this._errorHandler)
-    .catch((err) => {
-      console.log(err);
-    })
   }
 }
 

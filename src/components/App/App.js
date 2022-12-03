@@ -27,6 +27,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [btnElse, setBtnElse] = useState(false);
   const [countOfMovies, setCountOfMovies] = useState(0);
+  const [countOfShowMovies, setCountOfShowMovies] = useState(0);
   const [isActiveCheckbox, setIsActiveCheckbox] = useState(false);
   const [isActiveCheckboxSave, setIsActiveCheckboxSave] = useState(false);
   const [shortMoviesList, setShortMoviesList] = useState([]);
@@ -64,12 +65,6 @@ function handleSearchMovies(searchQuery) {
         })
         if (shortMovies.length === 0) {
           setNotFoundMovie(true);       
-        } else if (shortMovies.length <= 2) {
-          setBtnElse(false);
-        } else if (shortMovies.length > 3) {
-          setBtnElse(true);
-        } else if (countOfMovies < countOfAddMovies) {
-          setBtnElse(false);
         }
         setShortMoviesList(shortMovies);
         localStorage.setItem('search-movies', JSON.stringify(shortMovies));
@@ -86,12 +81,6 @@ function handleSearchMovies(searchQuery) {
         })
         if (longMovies.length === 0) {
           setNotFoundMovie(true);
-          setBtnElse(false);
-        } else if (longMovies.length <= 2) {
-          setBtnElse(false);
-        } else if (longMovies.length > 3) {
-          setBtnElse(true);
-        } else if (countOfMovies < countOfAddMovies) {
           setBtnElse(false);
         }
         setSearchMovies(longMovies);
@@ -155,16 +144,45 @@ function handleSearchSaveMovies(searchQuery) {
 
 function showMovies() {
   if (widthOfWindow >= 1280) {
-    setCountOfMovies(12); 
+    setCountOfShowMovies(12); 
     setCountOfAddMovies(3);
   } else if (widthOfWindow >= 768) {
-    setCountOfMovies(8);
+    setCountOfShowMovies(8);
     setCountOfAddMovies(2);
   } else if (widthOfWindow <= 480) {
-    setCountOfMovies(5);
+    setCountOfShowMovies(5);
     setCountOfAddMovies(5);
   }
 }
+
+  function checkedButtonElse() {
+    if (countOfMovies > 3 && countOfShowMovies < countOfMovies) {
+      setBtnElse(true);
+    } else {
+      setBtnElse(false);
+    }
+  }
+
+function addCard() {
+  if(searchMovies.length - countOfShowMovies > countOfAddMovies) {
+    setCountOfShowMovies(countOfShowMovies + countOfAddMovies);
+  } else {
+    setBtnElse(false);
+    setCountOfShowMovies(searchMovies.length);
+  }
+}
+  useEffect(() => {
+    if (loggedIn) {
+      setCountOfMovies(searchMovies.length);
+    }
+  }, [searchMovies])
+
+
+useEffect(() => {
+  if (loggedIn) {
+    checkedButtonElse();
+  }
+}, [countOfMovies]);
 
 window.onresize = (() => {
   setTimeout(() => {
@@ -177,22 +195,6 @@ useEffect(() => {
   showMovies();
 // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [widthOfWindow]);
-
-window.onresize = (() => {
-  setTimeout(() => {
-    setWidthOfWindow(window.innerWidth);
-    showMovies();
-  }, 500)
-})
-
-function addCard() {
-  if(searchMovies.length > countOfMovies) {
-    setCountOfMovies(countOfMovies + countOfAddMovies);
-  } else {
-    setBtnElse(false);
-    setCountOfMovies(searchMovies.length);
-  }
-}
 
 function handleRegister(data) {
   apiMain.register(data)
@@ -244,7 +246,7 @@ useEffect(() => {
       console.log(err.name);
     })
   }
-}, [loggedIn]);
+}, [loggedIn, onUpdateUserData]);
 
 function checkToken() {
   apiMain
@@ -265,6 +267,7 @@ useEffect(() => {
   checkToken();
 }, []);
 
+// eslint-disable-next-line react-hooks/exhaustive-deps
 function onUpdateUserData(data) {
   apiMain.changeUser(data)
   .then((res) => {
@@ -272,7 +275,7 @@ function onUpdateUserData(data) {
     setIsErrorMessage(true);
     setErrorMessage("Данные пользователя успешно обновлены.");
   })
-  .catch((err) => {
+  .catch(() => {
     setIsErrorMessage(true);
     setErrorMessage("При обновлении профиля произошла ошибка.");
   })
@@ -284,31 +287,16 @@ function onUpdateUserData(data) {
   })
 }
 
-function handleRemove(id) {
-  setSavedMovies([
-    ...savedMovies.filter(item => id !== item.movieId)
-  ])
-}
+
 
 function handleSavedMovies(currentMovie) {
   const isLiked = savedMovies.some(i => (i.movieId === currentMovie.movieId)) || currentMovie.owner;
-    if (isLiked) {
-      const id = currentMovie._id || currentMovie.movieId;
-      apiMain.deleteMovie(id)
-      .then(() => {
-        handleRemove(id);
-        console.log('карточка удалена');
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    } else {
-      apiMain.likeMovie(currentMovie)
+    if (!isLiked) {
+        apiMain.likeMovie(currentMovie)
       .then(() => {
         apiMain.getSavedMovies()
       .then((data) => {
         setSavedMovies(data);
-        console.log('карточка добавлена');
       })
       .catch((err) => {
         console.log(err);
@@ -317,6 +305,16 @@ function handleSavedMovies(currentMovie) {
     .catch((err) => {
       console.log(err.name);
     });
+    } else {
+      const id = currentMovie._id || currentMovie.movieId;
+      apiMain.deleteMovie(id)
+      .then(() => {
+        const arr = savedMovies.filter(item => id !== item._id);
+        setSavedMovies([...arr])
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 }
 
@@ -334,19 +332,20 @@ useEffect(() => {
       handleSearchMovies(localStorage.getItem('search-word'));
     }
   }
-}, [isActiveCheckbox]);
+}, [isActiveCheckbox, savedMovies]);
 
-useEffect(() => {
-  handleSearchMovies(searchWord);
-}, [isActiveCheckbox]);
+// useEffect(() => {
+//   setSearchMovies(searchWord);
+// }, [isActiveCheckbox, savedMovies]);
 
 useEffect(() => {
   handleSearchSaveMovies(searchQuerySaveMovies);
 }, [isActiveCheckboxSave, savedMovies]);
 
+
 useEffect(() => {
   setSavedMovies(savedMovies);
-}, [searchSaveMovies, isActiveCheckboxSave]);
+}, [searchSaveMovies, isActiveCheckboxSave, savedMovies]);
 
 useEffect(() => {
   const searchedMovies = JSON.parse(localStorage.getItem('search-movies'));
@@ -375,12 +374,12 @@ function signOut() {
     .then(() => {
     history.push('/');
     setSearchMovies([]);
-    isActiveCheckbox(false);
-    isActiveCheckboxSave(false);
-    setSearchMovies([]);
     setCountOfMovies(0);
-    setSavedMovies([]);
-    setSearchSaveMovies([]);
+    // setIsActiveCheckbox(false);
+    // setIsActiveCheckboxSave(false);
+    // setSavedMovies([]);
+    // setSearchSaveMovies([]);
+    setShortMoviesList([]);
     setLoggedIn(false);
     setSearchWord('');
     setNotFoundMovie(false);
@@ -411,9 +410,9 @@ function signOut() {
 
           {isChecked && <ProtectedRoute path="/profile-update" loggedIn={loggedIn} onUpdateUserData={onUpdateUserData} component={ProfileUpdate} errorMessage={errorMessage} isErrorMessage={isErrorMessage} />}
           
-          {isChecked && <ProtectedRoute path="/movies" moviesCards={searchMovies.slice(0, countOfMovies)} searchMovies={handleSearchMovies} preloader={preloader} handleSavedMovies={handleSavedMovies} loggedIn={loggedIn} component={Movies} filterShortMovies={filterShortMovies} addCard={addCard} btnElse={btnElse} moviesSavedCards={savedMovies} isActiveCheckbox={isActiveCheckbox} notFoundMovie={notFoundMovie} searchWord={searchWord} />}
+          {isChecked && <ProtectedRoute path="/movies" moviesCards={searchMovies.slice(0, countOfShowMovies)} searchMovies={handleSearchMovies} preloader={preloader} handleSavedMovies={handleSavedMovies} loggedIn={loggedIn} component={Movies} filterShortMovies={filterShortMovies} addCard={addCard} btnElse={btnElse} moviesSavedCards={savedMovies} isActiveCheckbox={isActiveCheckbox} notFoundMovie={notFoundMovie} searchWord={searchWord} />}
 
-          {isChecked && <ProtectedRoute path="/saved-movies" handleSavedMovies={handleSavedMovies} isSearched={isSearched} searchMovies={handleSearchSaveMovies} filterShortMovies={filterShortSaveMovies} moviesSavedCards={savedMovies || ''} searchSaveMovies={searchSaveMovies} loggedIn={loggedIn} component={SavedMovies} isActiveCheckbox={isActiveCheckboxSave} notFoundMovie={notFoundMovie} searchWord={searchWord} />}
+          {isChecked && <ProtectedRoute path="/saved-movies" handleSavedMovies={handleSavedMovies} isSearched={isSearched} searchMovies={handleSearchSaveMovies} filterShortMovies={filterShortSaveMovies} moviesSavedCards={savedMovies || []} searchSaveMovies={searchSaveMovies} loggedIn={loggedIn} component={SavedMovies} isActiveCheckbox={isActiveCheckboxSave} notFoundMovie={notFoundMovie} searchWord={searchQuerySaveMovies} />}
                  
           {isChecked && 
           <Route path="*">

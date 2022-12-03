@@ -27,11 +27,11 @@
   right: 10px;
   top: 76px;
 }
-.search-form__btn:disabled {
+/* .search-form__btn:disabled {
   pointer-events: none;
   cursor: default;
   opacity: 1;
-}
+} */
 .search-form__hr {
   margin-top: 39px;
   margin-bottom: 0;

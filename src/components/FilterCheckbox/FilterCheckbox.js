@@ -4,7 +4,6 @@ import React from "react";
 function FilterCheckbox(props) {
 
   return (
-    <>
     <div className="filter-checkbox" name="filter" method="get">
       <label className="filter-checkbox__label">
 	      <input type="checkbox" className="filter-checkbox__input" name="filter" onChange={props.filterShortMovies} checked={props.isActiveCheckbox}/>
@@ -12,7 +11,6 @@ function FilterCheckbox(props) {
       </label>
       <p className="filter-checkbox__text">Короткометражки</p>
     </div>
-    </>
   );
 }
 
