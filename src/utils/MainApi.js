@@ -85,8 +85,8 @@ class Api {
 }
 
 const api = new Api({
-  // baseUrl: 'https://api-movies.04.pe',
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'https://api-movies.04.pe',
+  // baseUrl: 'http://localhost:3000',
   // использую свой домен, так как тех поддержка яндекса не может решить проблему настройки доменов, а дедлайн уже очень близко нет времени ждать
   headers: {
     'Content-Type': 'application/json',

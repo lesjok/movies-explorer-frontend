@@ -331,7 +331,7 @@ useEffect(() => {
       handleSearchMovies(localStorage.getItem('search-word'));
     }
   }
-}, [isActiveCheckbox, savedMovies]);
+}, [isActiveCheckbox]);
 
 // useEffect(() => {
 //   setSearchMovies(searchWord);
