@@ -45,59 +45,71 @@ function filterShortMovies() {
 function filterShortSaveMovies() {
   setIsActiveCheckboxSave(!isActiveCheckboxSave);
 }
-  
-function handleSearchMovies(searchQuery) {
+
+
+function handleMovies(movies, searchQuery) {
   setShortMoviesList([]);
   setSearchMovies([]);
-  setPreloader(true);
   setIsSearched(true);
   setNotFoundMovie(false);
-  apiMovies.getAllMovies()
-  .then((movies) => {
-    if (movies) {
-      if (isActiveCheckbox === true) {
-        const shortMovies = movies.filter((movie) => {  
-          if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase()) && movie.duration <= 40) {
-            return movie.nameRU;
-          } else {
-            return null;
-          }
-        })
-        if (shortMovies.length === 0) {
-          setNotFoundMovie(true);       
-        }
-        setShortMoviesList(shortMovies);
-        localStorage.setItem('search-movies', JSON.stringify(shortMovies));
-        localStorage.setItem('search-word', searchQuery);
-        localStorage.setItem('checkbox', isActiveCheckbox);
+  if (isActiveCheckbox === true) {
+    const shortMovies = movies.filter((movie) => {
+      if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase()) && movie.duration <= 40) {
+        return movie.nameRU;
       } else {
-        // eslint-disable-next-line array-callback-return
-        const longMovies = movies.filter((movie) => {  
-          if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase())) {
-            return movie.nameRU;
-          } else if (movie.nameEN.toLowerCase().includes(searchQuery.toString().toLowerCase())) {
-            return movie.nameEN;
-          }
-        })
-        if (longMovies.length === 0) {
-          setNotFoundMovie(true);
-          setBtnElse(false);
-        }
-        setSearchMovies(longMovies);
-        localStorage.setItem('search-movies', JSON.stringify(longMovies));
-        localStorage.setItem('search-word', searchQuery);
-        localStorage.setItem('checkbox', isActiveCheckbox);
+        return null;
       }
-    } else {
-      setSearchMovies([]);
+    })
+    if (shortMovies.length === 0) {
+      setNotFoundMovie(true);
     }
-  })
-  .catch((err) => {
-    console.log(err);
-  })
-  .finally(() => {
+    setShortMoviesList(shortMovies);
+    localStorage.setItem('search-movies', JSON.stringify(shortMovies));
+    localStorage.setItem('search-word', searchQuery);
+    localStorage.setItem('checkbox', isActiveCheckbox);
+  } else {
+    // eslint-disable-next-line array-callback-return
+    const longMovies = movies.filter((movie) => {
+      if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase())) {
+        return movie.nameRU;
+      } else if (movie.nameEN.toLowerCase().includes(searchQuery.toString().toLowerCase())) {
+        return movie.nameEN;
+      }
+    })
+    if (longMovies.length === 0) {
+      setNotFoundMovie(true);
+      setBtnElse(false);
+    }
+    setSearchMovies(longMovies);
+    localStorage.setItem('search-movies', JSON.stringify(longMovies));
+    localStorage.setItem('search-word', searchQuery);
+    localStorage.setItem('checkbox', isActiveCheckbox);
+  }
+}
+
+function handleSearchMovies(searchQuery) {
+  setPreloader(true);
+  const searchMovies = localStorage.getItem('all-movies') ? JSON.parse(localStorage.getItem('all-movies')) : null;
+  if (searchMovies) {
+    handleMovies(searchMovies, searchQuery);
     setPreloader(false);
-  })
+  } else {
+    apiMovies.getAllMovies()
+      .then((movies) => {
+        if (movies) {
+          localStorage.setItem('all-movies', JSON.stringify(movies));
+          handleMovies(movies, searchQuery);
+        } else {
+          setSearchMovies([]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setPreloader(false);
+      })
+  }
 }
 
 function handleSearchSaveMovies(searchQuery) {
@@ -105,41 +117,31 @@ function handleSearchSaveMovies(searchQuery) {
   setIsSearched(true);
   setNotFoundMovie(false);
   setSearchSaveMovies([]);
-  setPreloader(true);
-    apiMain.getSavedMovies()
-    .then((movies) => {
-      if (isActiveCheckboxSave === true) {
-        const shortMovies = movies.filter((movie) => {
-          if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase()) && movie.duration <= 40) {
-            return movie.nameRU;
-          } else {
-            return null;
-          }
-        });
-      if (shortMovies.length === 0) {
+    if (isActiveCheckboxSave === true) {
+      const shortMovies = savedMovies.filter((movie) => {
+        if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase()) && movie.duration <= 40) {
+          return movie.nameRU;
+        } else {
+          return null;
+        }
+      });
+    if (shortMovies.length === 0) {
+      setNotFoundMovie(true);
+    }
+    setSearchSaveMovies(shortMovies);
+    } else {
+      const longMovies = savedMovies.filter((movie) => {
+        if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase())) {
+          return movie.nameRU;
+        } else {
+          return null;
+        }
+      });
+      if (longMovies.length === 0) {
         setNotFoundMovie(true);
       }
-      setSearchSaveMovies(shortMovies);
-      } else {
-        const longMovies = movies.filter((movie) => {
-          if (movie.nameRU.toLowerCase().includes(searchQuery.toString().toLowerCase())) {
-            return movie.nameRU;
-          } else {
-            return null;
-          }
-        });
-        if (longMovies.length === 0) {
-          setNotFoundMovie(true);
-        }
-        setSearchSaveMovies(longMovies);
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-    .finally(() => {
-      setPreloader(false);
-    })
+      setSearchSaveMovies(longMovies);
+    }
 }
 
 function showMovies() {
@@ -287,29 +289,22 @@ function onUpdateUserData(data) {
   })
 }
 
-
 function handleSavedMovies(currentMovie) {
   const isLiked = savedMovies.some(i => (i.movieId === currentMovie.movieId)) || currentMovie.owner;
     if (!isLiked) {
-        apiMain.likeMovie(currentMovie)
-      .then(() => {
-        apiMain.getSavedMovies()
-      .then((data) => {
-        setSavedMovies(data);
+      apiMain.likeMovie(currentMovie)
+      .then((card) => {
+        setSavedMovies([...savedMovies, card]);
       })
       .catch((err) => {
         console.log(err);
       })
-    })
-    .catch((err) => {
-      console.log(err.name);
-    });
     } else {
       const id = currentMovie._id || currentMovie.movieId;
       apiMain.deleteMovie(id)
       .then(() => {
         const arr = savedMovies.filter(item => id !== item._id);
-        setSavedMovies([...arr])
+        setSavedMovies([...arr]);
       })
       .catch((err) => {
         console.log(err)
@@ -328,23 +323,19 @@ useEffect(() => {
 useEffect(() => {
   if (loggedIn) {
     if (localStorage.getItem('search-word')) {
-      handleSearchMovies(localStorage.getItem('search-word'));
+      handleMovies(searchMovies, localStorage.getItem('search-word'));
     }
   }
 }, [isActiveCheckbox]);
 
-// useEffect(() => {
-//   setSearchMovies(searchWord);
-// }, [isActiveCheckbox, savedMovies]);
+useEffect(() => {
+  const searchWord = localStorage.getItem('search-word');
+  handleSearchMovies(searchWord);
+}, [isActiveCheckbox]);
 
 useEffect(() => {
   handleSearchSaveMovies(searchQuerySaveMovies);
 }, [isActiveCheckboxSave, savedMovies]);
-
-
-useEffect(() => {
-  setSavedMovies(savedMovies);
-}, [searchSaveMovies, isActiveCheckboxSave, savedMovies]);
 
 useEffect(() => {
   const searchedMovies = JSON.parse(localStorage.getItem('search-movies'));
@@ -353,7 +344,7 @@ useEffect(() => {
   if (searchedMovies && searchedMovies !== []) {
     setSearchMovies(searchedMovies);
   }
-}, [loggedIn, shortMoviesList, searchSaveMovies]);
+}, [loggedIn, shortMoviesList]);
 
 useEffect(() => {
   if (loggedIn) {
@@ -381,6 +372,7 @@ function signOut() {
     localStorage.removeItem('search-movies');
     localStorage.removeItem('checkbox');
     localStorage.removeItem('search-word');
+    localStorage.removeItem('all-movies');
     localStorage.clear();
   })
   .catch((err) => {

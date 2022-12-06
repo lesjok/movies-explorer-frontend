@@ -55,12 +55,10 @@
 .profile__signout:hover {
   opacity: .7;
 }
-.profile__edit:disabled {
-
-/* .profile__edit.profile__edit_disabled { */
+.profile__edit:disabled,
+.profile__edit.profile__edit_disabled {
   color: #C2C2C2;
   cursor: default;
-  bottom: none;
 }
 .profile__edit_disabled:hover {
   opacity: 1;

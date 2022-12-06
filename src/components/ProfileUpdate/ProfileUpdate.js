@@ -8,38 +8,37 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { useContext } from "react";
 
 function ProfileUpdate(props) {
-
   const currentUser = useContext(CurrentUserContext);
-  const [changeName, setChangeName] = React.useState();
-  const [changeEmail, setChangeEmail] = React.useState();
-
-  const {register, formState: { errors, isValid }, handleSubmit} = useForm({
+  const [isValidInput, setIsValidInput] = React.useState(false);
+  const {register, formState: { errors, isValid }, handleSubmit, getValues} = useForm({
     mode: "onChange"
   });
 
-  const onSubmit = (data) => {
-    if (data.name !== currentUser.name || data.email !== currentUser.email) {
-      props.onUpdateUserData({
-        name: data.name,
-        email: data.email,
-      })
-    } else {
-      console.log(!isValid);
-      return !isValid;
-    }
+function handleChange() {
+  if (getValues("name") !== currentUser.name || getValues("email") !== currentUser.email) {
+    setIsValidInput(true);
+    return isValid;
+  } else {
+    setIsValidInput(false);
+    return !isValid;
   }
+}
+React.useEffect(() => {
+  handleChange();
+}, [])
 
-  const changeNameInput = (data) => {
-    if (data.name  === currentUser.name) {
-      return !isValid;
-    }
-  }
-    const changeNameEmail = (data) => {
-    if (data.email === currentUser.email) {
-      return !isValid;
-    }
-  }
 
+const onSubmit = (data) => {
+  if (data.name !== currentUser.name || data.email !== currentUser.email) {
+    props.onUpdateUserData({
+      name: data.name,
+      email: data.email,
+    });
+    setIsValidInput(false);
+  } else {
+    return !isValid;
+  }
+}
   return (
     <>
     <Header isLogged={true}>
@@ -49,8 +48,9 @@ function ProfileUpdate(props) {
       <div className="auth profile">
         <form className="auth__form form" name="update" onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="name" className="form__label">Имя</label>   
-          <input type="text" className="input form__name" id="name" onChange={changeNameInput} name="name" {...register('name', {
+          <input type="text" className="input form__name" id="name"  name="name" {...register('name', {
           required: "Поле обязательно к заполнению",
+          onChange: (e) => {handleChange(e)},
           value: currentUser.name,
           minLength: 2,
           maxLength: 30,
@@ -61,8 +61,9 @@ function ProfileUpdate(props) {
           {errors?.name?.type === "maxLength" && <p>{errors?.name?.message || "Можно ввести максимум 30 символов"}</p>}
           </span>
           <label htmlFor="email" className="form__label">E-mail</label>
-          <input type="email" className="input form__email" id="email" onChange={changeNameEmail} name="email" {...register('email', {
+          <input type="email" className="input form__email" id="email" onChange={handleChange} name="email" {...register('email', {
           required: "Поле обязательно к заполнению",
+          onChange: (e) => {handleChange(e)},
           value: currentUser.email,
           pattern: /[^@\s]+@[^@\s]+\.[^@\s]+/g,
           })} />
@@ -71,7 +72,7 @@ function ProfileUpdate(props) {
           {errors?.email?.type === "pattern" && <p>{errors?.email?.message || "Введите корректный Email"}</p>}
           </span>
           <span className={`input__error ${props.isErrorMessage && 'input__error_show'}`}>{props.errorMessage}</span>
-          <button type="submit" className={`${!isValid ? 'profile__edit profile__edit_disabled' : 'profile__edit'}`} disabled={!isValid}>Сохранить</button>
+          <button type="submit" className={`${!isValidInput ? 'profile__edit profile__edit_disabled' : 'profile__edit'}`} disabled={!isValid}>Сохранить</button>
           <Link to="/" className="profile__signout">Выйти из аккаунта</Link>
         </form>
       </div>

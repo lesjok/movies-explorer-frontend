@@ -42,12 +42,12 @@ const movie = (props.path === '/movies') ? {
 }
 
 function onAddClick() {
-  props.onSaved(movie);
-  setButtonState("movies-card__btn_status_checked");
+  const movid = (props.moviesSavedCards.find(i => i.movieId === props.movie.id));
+  props.onSaved(isOwn ? movid : movie);
+  isOwn && setButtonState('movies-card__btn_status_not-checked');
 }
 function onDeleteClick() {
   props.onSaved(movie);
-  // setCardState("movies-card__invisible");
 }
 
 const buttonMovies = (isOwn ? "movies-card__btn_status_checked" : buttonState);
@@ -58,7 +58,7 @@ const buttonSaveMovies = ("movies-card_close");
       <a href={props.trailerLink} target="_blank" rel="noreferrer">
         <img src={props.path === '/movies' ? `https://api.nomoreparties.co/${props.movie.image.url}` : `${props.movie.image}`} alt={props.thumbnail} className="movie-card__img" />
       </a>     
-      <button className={(props.path === '/movies') ? buttonMovies : buttonSaveMovies} type="button" onClick={props.path === '/saved-movies' ? onDeleteClick : onAddClick} disabled={isOwn && props.path === '/movies'}>Сохранить</button>
+      <button className={(props.path === '/movies') ? buttonMovies : buttonSaveMovies} type="button" onClick={props.path === '/movies' ? onAddClick : onDeleteClick}>Сохранить</button>
       <div className="movie-card__info">
         <h6 className="movie-card__title">{props.nameRU}</h6>
         <p className="movie-card__duration">{`${Math.floor(props.duration / 60)}ч ${(props.duration % 60)}м`}</p>

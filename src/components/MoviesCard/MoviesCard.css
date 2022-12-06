@@ -99,7 +99,7 @@
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 470px) {
   .movies-card__btn_status_not-checked,
   .movies-card__btn_status_checked {
     top: 10px;
