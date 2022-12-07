@@ -48,8 +48,8 @@ function filterShortSaveMovies() {
 
 
 function handleMovies(movies, searchQuery) {
-  setShortMoviesList([]);
-  setSearchMovies([]);
+  // setShortMoviesList([]);
+  // setSearchMovies([]);
   setIsSearched(true);
   setNotFoundMovie(false);
   if (isActiveCheckbox === true) {
@@ -393,7 +393,7 @@ function signOut() {
           <Route path="/signup">
             {loggedIn ? <Redirect to="/" /> : <Register onRegister={handleRegister} errorMessage={errorMessage} isErrorMessage={isErrorMessage} />}
           </Route>
-          {isChecked && <ProtectedRoute path="/profile" loggedIn={loggedIn} component={Profile} onSignOut={signOut} userName={currentUser.name} userEmail={currentUser.email} />}
+          {isChecked && <ProtectedRoute path="/profile" loggedIn={loggedIn} component={Profile} onSignOut={signOut} userName={currentUser.name} userEmail={currentUser.email} setCurrentUser={checkToken} />}
 
           {isChecked && <ProtectedRoute path="/profile-update" loggedIn={loggedIn} onUpdateUserData={onUpdateUserData} component={ProfileUpdate} errorMessage={errorMessage} isErrorMessage={isErrorMessage} />}
           
