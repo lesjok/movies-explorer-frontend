@@ -1,17 +1,16 @@
 import "./FilterCheckbox.css";
+import React from "react";
 
+function FilterCheckbox(props) {
 
-function FilterCheckbox() {
   return (
-    <>
-    <form className="filter-checkbox" name="filter" method="get">
-      <label class="filter-checkbox__label">
-	      <input type="checkbox" className="filter-checkbox__input" name="filter" />
-	      <span class="filter-checkbox__span"></span>
+    <div className="filter-checkbox" name="filter" method="get">
+      <label className="filter-checkbox__label">
+	      <input type="checkbox" className="filter-checkbox__input" name="filter" onChange={props.filterShortMovies} checked={props.isActiveCheckbox}/>
+	      <span className="filter-checkbox__span"></span>
       </label>
       <p className="filter-checkbox__text">Короткометражки</p>
-    </form>
-    </>
+    </div>
   );
 }
 

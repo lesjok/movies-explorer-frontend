@@ -3,11 +3,16 @@
   position: relative;
   width: 359px;
 }
-.movie-card__img {
-   width: 100%;
-   height: 201px;
+.movies-card:hover .movies-card__btn_status_not-checked {
+  display: flex;
 }
-.movies-card__btn_status_not-checked {
+.movie-card__img {
+  width: 100%;
+  height: 201px;
+  border-radius: 6px;
+}
+.movies-card__btn_status_not-checked,
+.movies-card_close {
   position: absolute;
   top: 14px;
   right: 14px;
@@ -15,7 +20,7 @@
   border-radius: 30px;
   font-size: 10px;
   line-height: 9px;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   width: 72px;
@@ -24,7 +29,19 @@
   padding: 0;
   cursor: pointer;
 }
-.movies-card__btn_status_checked {
+.movies-card:hover .movies-card_close {
+  border-radius: 50%;
+  background-size: 15px 15px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url('../../images/dislike.svg');
+  font-size: 0;
+  width: 20px;
+  display: flex;
+  height: 20px;
+}
+.movies-card__btn_status_checked,
+.movies-card__btn_status_checked:disabled {
   width: 21px;
   height: 21px;
   background: url('../../images/checkmark.svg');
@@ -33,6 +50,13 @@
   right: 14px;
   font-size: 0;
   border: none;
+  cursor: pointer;
+}
+.movies-card__btn_status_checked:disabled {
+  cursor: default;
+}
+.movies-card__invisible {
+  display: none;
 }
 .movie-card__title {
   margin: 0;
@@ -75,7 +99,7 @@
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 470px) {
   .movies-card__btn_status_not-checked,
   .movies-card__btn_status_checked {
     top: 10px;
@@ -91,5 +115,21 @@
   }
   .movie-card__img {
     height: 168px;
+  }
+  .movies-card .movies-card_close {
+    background: #F9F9F9;
+    border-radius: 50%;
+    border: none;
+    font-size: 0;
+    width: 20px;
+    display: flex;
+    height: 20px;
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url('../../images/dislike.svg');
+  }
+  .movies-card__btn_status_not-checked {
+    display: flex;
   }
 }
