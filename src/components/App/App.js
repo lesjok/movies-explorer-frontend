@@ -46,10 +46,9 @@ function filterShortSaveMovies() {
   setIsActiveCheckboxSave(!isActiveCheckboxSave);
 }
 
-
 function handleMovies(movies, searchQuery) {
-  // setShortMoviesList([]);
-  // setSearchMovies([]);
+  setShortMoviesList([]);
+  setSearchMovies([]);
   setIsSearched(true);
   setNotFoundMovie(false);
   if (isActiveCheckbox === true) {
@@ -157,13 +156,13 @@ function showMovies() {
   }
 }
 
-  function checkedButtonElse() {
-    if (countOfMovies > 3 && countOfShowMovies < countOfMovies) {
-      setBtnElse(true);
-    } else {
-      setBtnElse(false);
-    }
+function checkedButtonElse() {
+  if (countOfMovies > 3 && countOfShowMovies < countOfMovies) {
+    setBtnElse(true);
+  } else {
+    setBtnElse(false);
   }
+}
 
 function addCard() {
   if(searchMovies.length - countOfShowMovies > countOfAddMovies) {
@@ -303,7 +302,7 @@ function handleSavedMovies(currentMovie) {
       const id = currentMovie._id || currentMovie.movieId;
       apiMain.deleteMovie(id)
       .then(() => {
-        const arr = savedMovies.filter(item => id !== item._id);
+        const arr = savedMovies.filter(item => id !== item._id);     
         setSavedMovies([...arr]);
       })
       .catch((err) => {
@@ -321,16 +320,10 @@ useEffect(() => {
 }, [loggedIn]);
 
 useEffect(() => {
-  if (loggedIn) {
-    if (localStorage.getItem('search-word')) {
-      handleMovies(searchMovies, localStorage.getItem('search-word'));
+    if (loggedIn) {
+      const searchWord = localStorage.getItem('search-word');
+      handleSearchMovies(searchWord);
     }
-  }
-}, [isActiveCheckbox]);
-
-useEffect(() => {
-  const searchWord = localStorage.getItem('search-word');
-  handleSearchMovies(searchWord);
 }, [isActiveCheckbox]);
 
 useEffect(() => {
