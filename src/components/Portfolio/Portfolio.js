@@ -20,7 +20,7 @@ function Portfolio() {
             </a>       
           </li>
           <li className="list__item item">
-            <a href="https://lesjok.github.io/HR-landing/" className="item__link" target="blank">
+            <a href="http://1149487-cj55507.tw1.ru/" className="item__link" target="blank">
               <p className="item__name">Одностраничное приложение</p>
               <img src={arrow} className="item__arrow" alt="arrow" /> 
             </a>    
